@@ -33,7 +33,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-[#555] rounded-md;
+    @apply bg-[black] rounded-md;
   }
 
   ::-webkit-scrollbar-track {
