@@ -1,9 +1,17 @@
-import { notesMock } from '@/store/mocks'
 import { NoteInfo } from '@shared/models'
 import { atom } from 'jotai'
 import { unwrap } from 'jotai/utils'
 
-export const notesAtom = atom<NoteInfo[]>(notesMock)
+const loadNotes = async () => {
+  const notes = await window.context.getNotes()
+
+  // sorth them by most recently edited
+  return notes.sort((a, b) => b.lastEditTime - a.lastEditTime)
+}
+
+const NotesAtomAsync = atom<NoteInfo[] | Promise<NoteInfo[]>>(loadNotes())
+
+export const notesAtom = unwrap(NotesAtomAsync, (prev) => prev)
 
 export const selectedNoteIndexAtom = atom<number | null>(0)
 
