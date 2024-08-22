@@ -1,7 +1,6 @@
 import {
   ActionButtonsRow,
   Content,
-  DraggableTopBar,
   FloatingNoteTitle,
   MarkdownEditor,
   NotePreviewList,
@@ -19,14 +18,17 @@ const App = () => {
 
   return (
     <>
-      <DraggableTopBar />
       <RootLayout>
-        <Sidebar className="p-2">
+        <Sidebar className="p-2" style={{ backgroundColor: '#202020' }}>
           <ActionButtonsRow className="flex justify-between mt-1" />
           <NotePreviewList className="mt-3 space-y-1" onSelect={resetScroll} />
         </Sidebar>
 
-        <Content ref={contentContainerRef} className="border-l bg-zinc-900/50 border-l-white/20">
+        <Content
+          ref={contentContainerRef}
+          className="border-l  border-l-white/20"
+          style={{ backgroundColor: '#202020' }}
+        >
           <FloatingNoteTitle className="pt-2" />
           <MarkdownEditor />
         </Content>

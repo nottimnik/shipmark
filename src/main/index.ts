@@ -1,29 +1,37 @@
 import { createNote, deleteNote, getNotes, readNote, writeNote } from '@/lib'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { CreateNote, DeleteNote, GetNotes, ReadNote, WriteNote } from '@shared/types'
+import { attachTitlebarToWindow, setupTitlebar } from 'custom-electron-titlebar/main'
 import { BrowserWindow, app, ipcMain, shell } from 'electron'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 
+// setup the titlebar main process
+setupTitlebar()
+
 function createWindow(): void {
-  // Create the browser window.
+  // Create the browser window
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
+    minWidth: 400,
+    minHeight: 300,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     center: true,
     title: 'NoteMark',
     frame: false,
+    titleBarOverlay: true,
+    titleBarStyle: 'hidden',
     vibrancy: 'under-window',
     visualEffectState: 'active',
-    titleBarStyle: 'hidden',
     trafficLightPosition: { x: 15, y: 10 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: true,
-      contextIsolation: true
+      sandbox: false,
+      contextIsolation: true,
+      webSecurity: false
     }
   })
 
@@ -43,6 +51,9 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  // attach fullScreen(f11 and not 'maximized') && focus listeners
+  attachTitlebarToWindow(mainWindow)
 }
 
 // This method will be called when Electron has finished
