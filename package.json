@@ -22,10 +22,15 @@
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^2.0.0",
     "@electron/remote": "^2.1.2",
+    "@geoffcox/react-splitter": "^2.1.2",
     "@mdxeditor/editor": "^1.14.3",
     "custom-electron-titlebar": "^4.2.8",
     "fs-extra": "^11.2.0",
-    "jotai": "^2.6.1"
+    "jotai": "^2.6.1",
+    "react-markdown": "^9.0.1",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.0",
+    "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^1.0.1",

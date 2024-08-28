@@ -1,6 +1,5 @@
 import { MDXEditorMethods } from '@mdxeditor/editor'
 import { saveNoteAtom, selectedNoteAtom } from '@renderer/store'
-import { autoSavingTime } from '@shared/constants'
 import { NoteContent } from '@shared/models'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { throttle } from 'lodash'
@@ -19,7 +18,7 @@ export const useMarkdownEditor = () => {
 
       await saveNote(content)
     },
-    autoSavingTime,
+    0,
     {
       leading: false,
       trailing: true

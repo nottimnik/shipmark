@@ -1,7 +1,6 @@
 import {
   ActionButtonsRow,
   Content,
-  FloatingNoteTitle,
   MarkdownEditor,
   NotePreviewList,
   RootLayout,
@@ -29,7 +28,6 @@ const App = () => {
           className="border-l  border-l-white/20"
           style={{ backgroundColor: '#202020' }}
         >
-          <FloatingNoteTitle className="pt-2" />
           <MarkdownEditor />
         </Content>
       </RootLayout>

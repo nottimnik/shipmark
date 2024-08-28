@@ -56,7 +56,7 @@ export const readNote: ReadNote = async (filename) => {
 export const writeNote: WriteNote = async (filename, content) => {
   const rootDir = getRootDir()
 
-  console.info(`Writing note ${filename}`)
+  // console.info(`Writing note ${filename}`)
   return writeFile(path.join(rootDir, `${filename}.md`), content, { encoding: fileEncoding }) // Changed to use `path.join`
 }
 
