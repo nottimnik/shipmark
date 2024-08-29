@@ -1,13 +1,9 @@
 import { createNote, deleteNote, getNotes, readNote, writeNote } from '@/lib'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { CreateNote, DeleteNote, GetNotes, ReadNote, WriteNote } from '@shared/types'
-import { attachTitlebarToWindow, setupTitlebar } from 'custom-electron-titlebar/main'
 import { BrowserWindow, app, ipcMain, shell } from 'electron'
 import { join } from 'path'
-import icon from '../../resources/icon.png?asset'
-
-// setup the titlebar main process
-setupTitlebar()
+import icon from '../../resources/favicon.ico?asset'
 
 function createWindow(): void {
   // Create the browser window
@@ -18,21 +14,43 @@ function createWindow(): void {
     minHeight: 300,
     show: false,
     autoHideMenuBar: true,
+    backgroundColor: '#202020',
     ...(process.platform === 'linux' ? { icon } : {}),
     center: true,
     title: 'NoteMark',
     frame: false,
-    titleBarOverlay: true,
+    icon: 'resources/favicon.ico',
+
     titleBarStyle: 'hidden',
     vibrancy: 'under-window',
     visualEffectState: 'active',
     trafficLightPosition: { x: 15, y: 10 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
-      contextIsolation: true,
-      webSecurity: false
+      sandbox: true,
+
+      webSecurity: false,
+      nodeIntegration: true
     }
+  })
+
+  // Handle minimize event
+  ipcMain.on('minimize-window', () => {
+    mainWindow.minimize()
+  })
+
+  // Handle maximize/unmaximize event
+  ipcMain.on('maximize-window', () => {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize()
+    } else {
+      mainWindow.maximize()
+    }
+  })
+
+  // Handle close event
+  ipcMain.on('close-window', () => {
+    mainWindow.close()
   })
 
   mainWindow.on('ready-to-show', () => {
@@ -51,9 +69,6 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-
-  // attach fullScreen(f11 and not 'maximized') && focus listeners
-  attachTitlebarToWindow(mainWindow)
 }
 
 // This method will be called when Electron has finished

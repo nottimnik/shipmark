@@ -1,6 +1,7 @@
 import {
   ActionButtonsRow,
   Content,
+  DraggableTopBar,
   MarkdownEditor,
   NotePreviewList,
   RootLayout,
@@ -17,7 +18,8 @@ const App = () => {
 
   return (
     <>
-      <RootLayout>
+      <DraggableTopBar />
+      <RootLayout className="mt-8">
         <Sidebar className="p-2" style={{ backgroundColor: '#202020' }}>
           <ActionButtonsRow className="flex justify-between mt-1" />
           <NotePreviewList className="mt-3 space-y-1" onSelect={resetScroll} />

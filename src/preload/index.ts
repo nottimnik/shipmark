@@ -1,7 +1,5 @@
 import { CreateNote, DeleteNote, GetNotes, ReadNote, WriteNote } from '@shared/types'
-import { Titlebar, TitlebarColor } from 'custom-electron-titlebar'
-import { contextBridge, ipcRenderer, nativeImage } from 'electron'
-import path from 'path'
+import { contextBridge, ipcRenderer } from 'electron'
 
 if (!process.contextIsolated) {
   throw new Error('contextIsolation must be enabled in the BrowserWindow')
@@ -17,17 +15,11 @@ try {
     deleteNote: (...args: Parameters<DeleteNote>) => ipcRenderer.invoke('deleteNote', ...args)
   })
 
-  // Title bar implementation
-  window.addEventListener('DOMContentLoaded', () => {
-    const options = {
-      icon: nativeImage.createFromPath(path.join(__dirname, './../../resources/icon.png')),
-      iconSize: 26,
-      backgroundColor: TitlebarColor.fromHex('#121212')
-    }
-
-    new Titlebar(options)
+  contextBridge.exposeInMainWorld('electron', {
+    minimizeWindow: () => ipcRenderer.send('minimize-window'),
+    maximizeWindow: () => ipcRenderer.send('maximize-window'),
+    closeWindow: () => ipcRenderer.send('close-window')
   })
-  console.log(__dirname)
 } catch (error) {
   console.error(error)
 }
