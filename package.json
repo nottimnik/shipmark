@@ -1,7 +1,7 @@
 {
-  "name": "note-mark",
-  "version": "1.0.0",
-  "description": "A Markdown Note taking app built with Electron",
+  "name": "mark-pad",
+  "version": "0.9.0",
+  "description": "A simple markdown editor",
   "license": "MIT",
   "main": "./out/main/index.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "autoprefixer": "^10.4.16",
     "clsx": "^2.1.0",
     "electron": "^25.6.0",
-    "electron-builder": "^24.6.3",
+    "electron-builder": "^24.13.3",
     "electron-vite": "^1.0.27",
     "eslint": "^8.47.0",
     "eslint-plugin-react": "^7.33.2",
@@ -62,5 +62,27 @@
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
+  },
+  "build": {
+    "appId": "com.yourapp.id",
+    "productName": "MarkPad",
+    "files": [
+      "out/",
+      "resources/**/*",
+      "src/renderer/**/*",
+      "src/preload/**/*",
+      "src/shared/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "build"
+    },
+    "win": {
+      "icon": "resources/favicon.ico",
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    }
   }
 }

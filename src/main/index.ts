@@ -17,7 +17,7 @@ function createWindow(): void {
     backgroundColor: '#202020',
     ...(process.platform === 'linux' ? { icon } : {}),
     center: true,
-    title: 'NoteMark',
+    title: 'MarkPad',
     frame: false,
     icon: 'resources/favicon.ico',
 
