@@ -61,26 +61,32 @@ export const writeNote: WriteNote = async (filename, content) => {
 }
 
 export const createNote: CreateNote = async () => {
+  // Get the root directory where notes are stored
   const rootDir = getRootDir()
 
+  // Ensure that the root directory exists, create it if it doesn't
   await ensureDir(rootDir)
 
+  // Open a dialog to save the new note
   const { filePath, canceled } = await dialog.showSaveDialog({
     title: 'New note',
-    defaultPath: path.join(rootDir, 'Untitled.md'), // Changed to use `path.join`
-    buttonLabel: 'Create',
-    properties: ['showOverwriteConfirmation'],
-    showsTagField: false,
-    filters: [{ name: 'Markdown', extensions: ['md'] }]
+    defaultPath: path.join(rootDir, 'Untitled.md'), // Default filename for the new note
+    buttonLabel: 'Create', // Label for the dialog's create button
+    properties: ['showOverwriteConfirmation'], // Prompt the user if a file with the same name exists
+    showsTagField: false, // Hide the tag field in the dialog
+    filters: [{ name: 'Markdown', extensions: ['md'] }] // Limit file types to Markdown files
   })
 
+  // If the user cancels the dialog or no file path is selected, exit the function
   if (canceled || !filePath) {
     console.info('Note creation canceled')
     return false
   }
 
+  // Parse the selected file path to get the filename and parent directory
   const { name: filename, dir: parentDir } = path.parse(filePath)
 
+  // Ensure that the note is saved within the root directory
   if (parentDir !== rootDir) {
     await dialog.showMessageBox({
       type: 'error',
@@ -92,7 +98,8 @@ export const createNote: CreateNote = async () => {
     return false
   }
 
-  console.info(`Creating note: ${filePath}`)
+  // If all checks pass, create the new note file
+  // console.info(`Creating note: ${filePath}`)
   await writeFile(filePath, '')
 
   return filename

@@ -1,6 +1,11 @@
+import { markdown as mark, markdownLanguage } from '@codemirror/lang-markdown'
+import { EditorView, ViewUpdate } from '@codemirror/view' // Import ViewUpdate
 import { Split } from '@geoffcox/react-splitter'
+import { tags as t } from '@lezer/highlight'
 import { useMarkdownEditor } from '@renderer/hooks/useMarkdownEditor'
-import { useEffect, useState } from 'react'
+import { createTheme } from '@uiw/codemirror-themes'
+import CodeMirror from '@uiw/react-codemirror'
+import { useEffect, useMemo, useState } from 'react'
 import { MdError } from 'react-icons/md'
 import ReactMarkdown from 'react-markdown'
 import rehypeKatex from 'rehype-katex'
@@ -13,6 +18,41 @@ export const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState('')
   const [saved, setSaved] = useState('Saved')
   const [title, setTitle] = useState('')
+  const [font, setFont] = useState(16)
+
+  const myTheme = useMemo(
+    () =>
+      createTheme({
+        theme: 'dark',
+        settings: {
+          background: '#121212',
+          backgroundImage: '#121212',
+          foreground: 'white',
+
+          selection: '#242424 ',
+          selectionMatch: '#242424 ',
+          lineHighlight: '#242424 ',
+          gutterBackground: '#121212',
+          gutterForeground: 'white',
+          fontFamily:
+            "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial",
+          fontSize: `${font}px`
+        },
+        styles: [
+          { tag: t.comment, color: '#d5d9df' },
+          { tag: t.heading, color: 'rgb(48, 186, 120)' },
+          { tag: t.contentSeparator, color: 'rgb(255, 255, 0)' },
+          { tag: t.list, color: 'rgb(255, 174, 215)' },
+          { tag: t.quote, color: 'rgb(64,128,128)' },
+          { tag: t.emphasis, color: 'rgb(167, 167, 167)' },
+          { tag: t.strong, color: 'rgb(167, 167, 167)' },
+          { tag: t.link, color: 'rgb(128, 128, 255)' },
+          { tag: t.monospace, color: 'rgb(167, 167, 167)' },
+          { tag: t.strikethrough, color: 'rgb(167, 167, 167)' }
+        ]
+      }),
+    [font]
+  )
 
   useEffect(() => {
     if (selectedNote) {
@@ -58,8 +98,8 @@ export const MarkdownEditor = () => {
     }
   }, [markdown, selectedNote?.title]) // Dependencies array
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMarkdown(event.target.value)
+  const handleChange = (value: string, viewUpdate: ViewUpdate) => {
+    setMarkdown(value)
   }
 
   if (!selectedNote) {
@@ -167,7 +207,26 @@ export const MarkdownEditor = () => {
           </div>
 
           {/* Main Content Area */}
-          <textarea
+          <CodeMirror
+            extensions={[mark({ base: markdownLanguage }), EditorView.lineWrapping]}
+            style={{
+              width: '100%',
+              height: 'calc(100% - 25px)', // Full height
+              backgroundColor: '#121212',
+              resize: 'none',
+              outline: 'none', // Removes the focus outline.
+              whiteSpace: 'pre-wrap', // Ensure text wraps within the editor
+              wordBreak: 'break-word',
+              fontSize: 16,
+              overflowY: 'auto'
+            }}
+            value={markdown}
+            theme={myTheme}
+            onBlur={handleBlur}
+            onChange={handleChange} // Use the modified handleChange function here
+          />
+
+          {/* <textarea
             style={{
               width: '100%',
               backgroundColor: '#121212',
@@ -176,10 +235,10 @@ export const MarkdownEditor = () => {
               outline: 'none', // Removes the focus outline.
               padding: 10
             }}
+
             value={markdown}
-            onChange={handleChange}
             onBlur={handleBlur}
-          />
+          /> */}
         </div>
 
         <div

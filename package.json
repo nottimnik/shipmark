@@ -14,17 +14,26 @@
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "build:win": "npm run build && electron-builder --win --config",
-    "build:mac": "electron-vite build && electron-builder --mac --config",
-    "build:linux": "electron-vite build && electron-builder --linux --config"
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux"
   },
   "dependencies": {
+    "@codemirror/gutter": "^0.19.9",
+    "@codemirror/lang-markdown": "^6.2.5",
+    "@codemirror/language-data": "^6.5.1",
+    "@codemirror/view": "^6.33.0",
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^2.0.0",
     "@electron/remote": "^2.1.2",
     "@geoffcox/react-splitter": "^2.1.2",
     "@mdxeditor/editor": "^1.14.3",
+    "@uiw/codemirror-theme-abcdef": "^4.23.0",
+    "@uiw/codemirror-theme-basic": "^4.23.0",
+    "@uiw/codemirror-theme-vscode": "^4.23.0",
+    "@uiw/react-codemirror": "^4.23.0",
     "custom-electron-titlebar": "^4.2.8",
+    "electron-store": "^10.0.0",
     "fs-extra": "^11.2.0",
     "jotai": "^2.6.1",
     "react-markdown": "^9.0.1",
@@ -78,11 +87,20 @@
       "output": "build"
     },
     "win": {
-      "icon": "resources/favicon.ico",
       "target": [
-        "nsis",
-        "zip"
-      ]
+        "nsis"
+      ],
+      "icon": "resources/icon.ico"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    },
+    "mac": {
+      "icon": "resources/icon.icns"
+    },
+    "linux": {
+      "icon": "resources/icon.png"
     }
   }
 }
